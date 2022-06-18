@@ -10,16 +10,19 @@ public class ConsoleProgress implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            String[] process = {"|", "/", "-", "\\"};
+            System.out.print("\r load: " + process[count]);
             count++;
-            String[] process = {"|", "\\|/"};
-            System.out.print("\r load: " + process[count % 2]);
+            if (count == process.length) {
+                count = 0;
+            }
         }
     }
 
     public static void main(String[] args) throws InterruptedException {
         Thread progress = new Thread(new ConsoleProgress());
         progress.start();
-        Thread.sleep(1000);
+        Thread.sleep(4000);
         progress.interrupt();
     }
 }
