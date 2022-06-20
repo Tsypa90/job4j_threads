@@ -8,7 +8,6 @@ import java.net.URL;
 public class Wget implements Runnable {
     private final String url;
     private final int speed;
-    private static final int SPEEDLIMIT = 1048576;
     private static final int SECOND = 1000;
 
     public Wget(String url, int speed) {
