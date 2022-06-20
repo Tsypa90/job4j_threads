@@ -8,7 +8,7 @@ import java.net.URL;
 public class Wget implements Runnable {
     private final String url;
     private final int speed;
-    private static final int SPEEDLIMIT = 1024;
+    private static final int SPEEDLIMIT = 1048576;
     private static final int SECOND = 1000;
 
     public Wget(String url, int speed) {
@@ -18,28 +18,31 @@ public class Wget implements Runnable {
 
     @Override
     public void run() {
+        var name = url.split("/");
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream("pom_tmp.xml")) {
+             FileOutputStream fileOutputStream = new FileOutputStream(name[name.length - 1])) {
             byte[] dataBuffer = new byte[speed];
             int bytesRead;
+            int downloadData = 0;
+            long start = System.currentTimeMillis();
             while ((bytesRead = in.read(dataBuffer, 0, speed)) != -1) {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
-                try {
-                    Thread.sleep((bytesRead / SPEEDLIMIT) * SECOND);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+                downloadData += bytesRead;
+                if (downloadData >= SPEEDLIMIT) {
+                    long pause = System.currentTimeMillis() - start;
+                    if (pause < SECOND) {
+                        try {
+                            Thread.sleep(SECOND - pause);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                    downloadData = 0;
+                    start = System.currentTimeMillis();
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) throws InterruptedException {
-        String url = args[0];
-        int speed = Integer.parseInt(args[1]);
-        Thread wget = new Thread(new Wget(url, speed));
-        wget.start();
-        wget.join();
     }
 }
