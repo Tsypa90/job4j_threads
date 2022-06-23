@@ -1,7 +1,7 @@
 package ru.job4j.concurrent;
 
-import java.io.File;
+import java.util.function.Predicate;
 
 public interface Get {
-    public String getContent(File file);
+    public String getContent(Predicate<Character> filter);
 }

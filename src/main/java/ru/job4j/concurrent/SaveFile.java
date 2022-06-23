@@ -10,9 +10,10 @@ public final class SaveFile {
     }
 
     public synchronized void saveContent(String content) {
-        try (PrintWriter printWriter = new PrintWriter(new BufferedOutputStream(new FileOutputStream(file)))) {
-            printWriter.write(content);
-            printWriter.flush();
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            for (int i = 0; i < content.length(); i += 1) {
+                out.write(content.charAt(i));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
