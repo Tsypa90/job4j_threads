@@ -14,15 +14,19 @@ public final class GetContent implements Get {
 
     @Override
     public String getContent(Predicate<Character> filter) {
-        String content = "";
+        StringBuilder sb = new StringBuilder();
         try (FileReader reader = new FileReader(file)) {
             int data;
             if ((data = reader.read()) != -1) {
-                content += (char) data;
+                if (filter.test((char) data)) {
+                    sb.append((char) data);
+                } else {
+                    sb.append((char) data);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return content;
+        return sb.toString();
     }
 }
