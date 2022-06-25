@@ -20,8 +20,6 @@ public final class GetContent implements Get {
             if ((data = reader.read()) != -1) {
                 if (filter.test((char) data)) {
                     sb.append((char) data);
-                } else {
-                    sb.append((char) data);
                 }
             }
         } catch (IOException e) {
