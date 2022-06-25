@@ -12,13 +12,11 @@ public final class UserStorage {
     private final Map<Integer, User> users = new ConcurrentHashMap<>();
 
     public synchronized boolean add(User user) {
-        var value =  users.putIfAbsent(user.getId(), user);
-        return user.equals(value);
+        return users.putIfAbsent(user.getId(), user) == null;
     }
 
     public synchronized boolean update(User user) {
-        var value = users.replace(user.getId(), user);
-        return user.equals(value);
+        return users.replace(user.getId(), user) != null;
     }
 
     public synchronized boolean delete(User user) {
@@ -26,15 +24,17 @@ public final class UserStorage {
     }
 
     public synchronized void transfer(int fromId, int toId, int amount) {
-        if (users.get(fromId) == null || users.get(toId) == null) {
+        var userFrom = users.get(fromId);
+        var userTo = users.get(toId);
+        if (userFrom == null || userTo == null) {
             throw new NullPointerException("There are no Users to transfer amount");
         }
-        int fromAmount = users.get(fromId).getAmount();
-        int toAmount = users.get(toId).getAmount();
+        int fromAmount = userFrom.getAmount();
+        int toAmount = userTo.getAmount();
         if (fromAmount < amount) {
             throw new IllegalArgumentException("Not enough amount");
         }
-        users.get(fromId).setAmount(fromAmount - amount);
-        users.get(toId).setAmount(toAmount + amount);
+        userFrom.setAmount(fromAmount - amount);
+        userTo.setAmount(toAmount + amount);
     }
 }
