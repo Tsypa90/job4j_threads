@@ -9,20 +9,25 @@ import java.util.*;
 public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private final Queue<T> queue = new LinkedList<>();
+    private final int bound;
 
-    public synchronized void offer(T value) {
-        queue.add(value);
-        this.notifyAll();
+    public SimpleBlockingQueue(int bound) {
+        this.bound = bound;
     }
 
-    public synchronized T poll() {
-        try {
-            while (queue.isEmpty()) {
-                this.wait();
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+    public synchronized void offer(T value) {
+        if (queue.size() < bound) {
+            queue.add(value);
+            this.notifyAll();
         }
-        return queue.poll();
+    }
+
+    public synchronized T poll() throws InterruptedException {
+        while (queue.isEmpty()) {
+            this.wait();
+        }
+        T rsl = queue.poll();
+        this.notifyAll();
+        return rsl;
     }
 }

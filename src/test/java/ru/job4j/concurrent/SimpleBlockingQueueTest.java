@@ -11,10 +11,16 @@ public class SimpleBlockingQueueTest {
 
     @Test
     public void whenThreadPoll() throws InterruptedException {
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>();
+        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(3);
         AtomicInteger rsl = new AtomicInteger();
         Thread producer = new Thread(() -> queue.offer(5));
-        Thread consumer = new Thread(() -> rsl.set(queue.poll()));
+        Thread consumer = new Thread(() -> {
+            try {
+                rsl.set(queue.poll());
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
         producer.start();
         consumer.start();
         producer.join();
