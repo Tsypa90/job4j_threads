@@ -66,4 +66,13 @@ public class CacheTest {
         assertTrue(cache.add(base));
     }
 
+    @Test (expected = Exception.class)
+    public void whenAddThenDeleteThenAddAgainAndFalse() {
+        Cache cache = new Cache();
+        Base base = new Base(1, 0);
+        Base user = new Base(1, 1);
+        cache.add(base);
+        cache.update(user);
+    }
+
 }
