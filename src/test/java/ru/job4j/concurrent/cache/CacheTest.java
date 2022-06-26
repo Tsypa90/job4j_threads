@@ -24,14 +24,8 @@ public class CacheTest {
     public void whenAddTwiceAndGetFalse() throws InterruptedException {
         Cache cache = new Cache();
         Base base = new Base(1, 0);
-        AtomicBoolean rsl = new AtomicBoolean(false);
-        Thread one = new Thread(() -> cache.add(base));
-        Thread two = new Thread(() -> rsl.set(cache.add(base)));
-        one.start();
-        two.start();
-        one.join();
-        two.join();
-        assertFalse(rsl.get());
+        cache.add(base);
+        assertFalse(cache.add(base));
     }
 
     @Test
