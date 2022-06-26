@@ -15,11 +15,12 @@ public class SimpleBlockingQueue<T> {
         this.bound = bound;
     }
 
-    public synchronized void offer(T value) {
-        if (queue.size() < bound) {
-            queue.add(value);
-            this.notifyAll();
+    public synchronized void offer(T value) throws InterruptedException {
+        while (queue.size() + 1 >= bound) {
+            this.wait();
         }
+        queue.add(value);
+        this.notifyAll();
     }
 
     public synchronized T poll() throws InterruptedException {
