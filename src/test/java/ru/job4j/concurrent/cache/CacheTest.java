@@ -29,14 +29,6 @@ public class CacheTest {
     }
 
     @Test
-    public void whenChangeBaseNameAndGetVersion1() throws InterruptedException {
-        Cache cache = new Cache();
-        Base base = new Base(1, 0);
-        base.setName("New name");
-        assertThat(base.getVersion(), is(1));
-    }
-
-    @Test
     public void whenAddBaseThenChangeNameAndUpdateThenTrue() throws InterruptedException {
         Cache cache = new Cache();
         Base base = new Base(1, 0);
