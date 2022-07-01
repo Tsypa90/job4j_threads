@@ -10,19 +10,20 @@ public class ThreadPool {
 
     public ThreadPool() {
         for (int i = 0; i < size; i++) {
-            threads.add(new Thread(() -> {
-                try {
+            Thread thread = new Thread(() -> {
                     while (!Thread.currentThread().isInterrupted()) {
-                        var task = tasks.poll();
+                        Runnable task = null;
+                        try {
+                            task = tasks.poll();
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
                         if (task != null) {
                             task.run();
                         }
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }));
-            threads.get(i).start();
+                    }});
+            threads.add(thread);
+            thread.start();
         }
     }
 
