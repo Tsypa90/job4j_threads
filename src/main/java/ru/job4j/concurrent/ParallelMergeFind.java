@@ -41,7 +41,7 @@ public class ParallelMergeFind<T> extends RecursiveTask<Integer> {
         return rsl;
     }
 
-    public static int find(Object[] array, Object element) {
+   public static<T> int find(T[] array, T element) {
         ForkJoinPool pool = new ForkJoinPool();
         return pool.invoke(new ParallelMergeFind<>(array, element, 0, array.length - 1));
     }
