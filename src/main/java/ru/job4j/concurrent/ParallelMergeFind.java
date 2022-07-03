@@ -29,7 +29,6 @@ public class ParallelMergeFind<T> extends RecursiveTask<Integer> {
             }
         } else {
             int mid = (from + to) / 2;
-            System.out.println(Thread.currentThread().getName());
             ParallelMergeFind<T> leftFind = new ParallelMergeFind<>(array, elementToSearch, from, mid);
             ParallelMergeFind<T> rightFind = new ParallelMergeFind<>(array, elementToSearch, mid + 1, to);
             leftFind.fork();
