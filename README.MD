@@ -6,3 +6,5 @@
 4. Wait, Notify, NotifyAll
 5. Non Blocking Algoritm
 6. Пулы
+
+Changes for task_504827
