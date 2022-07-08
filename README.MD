@@ -6,3 +6,5 @@
 4. Wait, Notify, NotifyAll
 5. Non Blocking Algoritm
 6. Пулы
+
+В курсе производилась работа с ветками git."
